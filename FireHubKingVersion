@@ -1,0 +1,135 @@
+-- [FIRE HUB👑] - King Version (Full & Fixed)
+local Player = game:GetService("Players").LocalPlayer
+local PlayerGui = Player:WaitForChild("PlayerGui")
+local KEY = "AdamXRC7"
+
+local ScreenGui = Instance.new("ScreenGui", PlayerGui)
+ScreenGui.Name = "FIRE_HUB_GUI"
+ScreenGui.ResetOnSpawn = false
+
+-- --- UI LOGIN ---
+local LoginFrame = Instance.new("Frame", ScreenGui)
+LoginFrame.Size = UDim2.new(0, 200, 0, 150)
+LoginFrame.Position = UDim2.new(0.5, -100, 0.5, -75)
+LoginFrame.BackgroundColor3 = Color3.fromRGB(20, 20, 20)
+LoginFrame.Active = true
+LoginFrame.Draggable = true
+Instance.new("UICorner", LoginFrame).CornerRadius = UDim.new(0, 10)
+
+local KeyBox = Instance.new("TextBox", LoginFrame)
+KeyBox.Size = UDim2.new(0.8, 0, 0, 40)
+KeyBox.Position = UDim2.new(0.1, 0, 0.2, 0)
+KeyBox.PlaceholderText = "Enter Key..." 
+KeyBox.Text = "" 
+KeyBox.BackgroundColor3 = Color3.fromRGB(35, 35, 35)
+KeyBox.TextColor3 = Color3.fromRGB(255, 255, 255)
+Instance.new("UICorner", KeyBox).CornerRadius = UDim.new(0, 6)
+KeyBox.Parent = LoginFrame
+
+local LoginBtn = Instance.new("TextButton", LoginFrame)
+LoginBtn.Size = UDim2.new(0.8, 0, 0, 40)
+LoginBtn.Position = UDim2.new(0.1, 0, 0.6, 0)
+LoginBtn.BackgroundColor3 = Color3.fromRGB(0, 150, 75)
+LoginBtn.Text = "LOGIN"
+LoginBtn.TextColor3 = Color3.fromRGB(255, 255, 255)
+Instance.new("UICorner", LoginBtn).CornerRadius = UDim.new(0, 6)
+LoginBtn.Parent = LoginFrame
+
+-- --- UI UTAMA ---
+local ToggleBtn = Instance.new("TextButton", ScreenGui)
+ToggleBtn.Visible = false 
+ToggleBtn.Size = UDim2.new(0, 80, 0, 30)
+ToggleBtn.Position = UDim2.new(0, 10, 0, 10)
+ToggleBtn.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
+ToggleBtn.Text = "Toggle UI"
+ToggleBtn.TextColor3 = Color3.fromRGB(255, 255, 255)
+Instance.new("UICorner", ToggleBtn).CornerRadius = UDim.new(0, 6)
+
+local MainFrame = Instance.new("Frame", ScreenGui)
+MainFrame.Visible = false
+MainFrame.Size = UDim2.new(0, 220, 0, 240)
+MainFrame.Position = UDim2.new(0.5, -110, 0.4, -120)
+MainFrame.BackgroundColor3 = Color3.fromRGB(20, 20, 20)
+MainFrame.Active = true
+MainFrame.Draggable = true
+Instance.new("UICorner", MainFrame).CornerRadius = UDim.new(0, 10)
+
+local Title = Instance.new("TextLabel", MainFrame)
+Title.Size = UDim2.new(1, 0, 0, 30)
+Title.BackgroundTransparency = 1
+Title.Text = "King Version👑"
+Title.TextColor3 = Color3.fromRGB(255, 215, 0)
+Title.Font = Enum.Font.SourceSansBold
+Title.TextSize = 18
+Title.Parent = MainFrame
+
+local TextBox = Instance.new("TextBox", MainFrame)
+TextBox.Size = UDim2.new(0.8, 0, 0, 35)
+TextBox.Position = UDim2.new(0.1, 0, 0.2, 0)
+TextBox.PlaceholderText = "Enter Name..."
+TextBox.Text = ""
+TextBox.BackgroundColor3 = Color3.fromRGB(35, 35, 35)
+TextBox.TextColor3 = Color3.fromRGB(255, 255, 255)
+Instance.new("UICorner", TextBox).CornerRadius = UDim.new(0, 6)
+TextBox.Parent = MainFrame
+
+local StartButton = Instance.new("TextButton", MainFrame)
+StartButton.Size = UDim2.new(0.8, 0, 0, 40)
+StartButton.Position = UDim2.new(0.1, 0, 0.45, 0)
+StartButton.BackgroundColor3 = Color3.fromRGB(0, 150, 75)
+StartButton.Text = "SPAWN"
+StartButton.TextColor3 = Color3.fromRGB(255, 255, 255)
+Instance.new("UICorner", StartButton).CornerRadius = UDim.new(0, 6)
+StartButton.Parent = MainFrame
+
+local TeleportBtn = Instance.new("TextButton", MainFrame)
+TeleportBtn.Size = UDim2.new(0.8, 0, 0, 30)
+TeleportBtn.Position = UDim2.new(0.1, 0, 0.65, 0)
+TeleportBtn.BackgroundColor3 = Color3.fromRGB(60, 60, 60)
+TeleportBtn.Text = "Void"
+TeleportBtn.TextColor3 = Color3.fromRGB(255, 255, 255)
+Instance.new("UICorner", TeleportBtn).CornerRadius = UDim.new(0, 6)
+TeleportBtn.Parent = MainFrame
+
+local Credits = Instance.new("TextLabel", MainFrame)
+Credits.Size = UDim2.new(1, 0, 0, 20)
+Credits.Position = UDim2.new(0, 0, 1, -25)
+Credits.BackgroundTransparency = 1
+Credits.Text = "Demon Hack x AdamRc7"
+Credits.TextColor3 = Color3.fromRGB(100, 100, 100)
+Credits.Font = Enum.Font.SourceSansItalic
+Credits.TextSize = 12
+Credits.Parent = MainFrame
+
+-- --- LOGIK ---
+LoginBtn.MouseButton1Click:Connect(function()
+    if KeyBox.Text == KEY then
+        LoginFrame.Visible = false
+        ToggleBtn.Visible = true
+        MainFrame.Visible = true
+    else
+        KeyBox.Text = ""
+        KeyBox.PlaceholderText = "Wrong Key!"
+    end
+end)
+
+ToggleBtn.MouseButton1Click:Connect(function() MainFrame.Visible = not MainFrame.Visible end)
+
+StartButton.MouseButton1Click:Connect(function()
+    local target = nil
+    for _, i in pairs(game:GetService("ReplicatedStorage"):WaitForChild("Items"):GetChildren()) do
+        if string.find(string.lower(i.Name), string.lower(TextBox.Text)) then target = i break end
+    end
+    if target then
+        local args = {target, {questName = "Dumplings Quest", questRequiredItems = {}, prizeItem = "Rainbow Dumpling"}}
+        for t = 1, 4 do
+            task.spawn(function()
+                for i = 1, 500 do
+                    game:GetService("ReplicatedStorage"):WaitForChild("RemoteEvents"):WaitForChild("GetItem"):FireServer(unpack(args))
+                end
+            end)
+        end
+    end
+end)
+
+TeleportBtn.MouseButton1Click:Connect(function() Player.Character:MoveTo(Vector3.new(0, 50000, 0)) end)
