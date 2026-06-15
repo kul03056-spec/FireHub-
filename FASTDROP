@@ -1,0 +1,63 @@
+-- [STABLE BALANCED ENGINE: EQUIP(0.8s) + DROP(FAST)]
+local Player = game:GetService("Players").LocalPlayer
+local PlayerGui = Player:WaitForChild("PlayerGui")
+local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local Remotes = ReplicatedStorage:WaitForChild("RemoteEvents")
+
+local IsActive = false 
+
+-- --- UI SETUP ---
+local ScreenGui = Instance.new("ScreenGui", PlayerGui)
+ScreenGui.Name = "BALANCED_ENGINE_GUI"
+ScreenGui.ResetOnSpawn = false
+
+local MainFrame = Instance.new("Frame", ScreenGui)
+MainFrame.Size = UDim2.new(0, 220, 0, 180); MainFrame.Position = UDim2.new(0.5, -110, 0.4, -90)
+MainFrame.BackgroundColor3 = Color3.fromRGB(25, 25, 25); MainFrame.Active = true; MainFrame.Draggable = true
+Instance.new("UICorner", MainFrame).CornerRadius = UDim.new(0, 8)
+
+local ItemInput = Instance.new("TextBox", MainFrame)
+ItemInput.Size = UDim2.new(0.8, 0, 0, 40); ItemInput.Position = UDim2.new(0.1, 0, 0.15, 0)
+ItemInput.PlaceholderText = "Item Name..."; ItemInput.BackgroundColor3 = Color3.fromRGB(45, 45, 45); ItemInput.TextColor3 = Color3.fromRGB(255, 255, 255); ItemInput.Parent = MainFrame
+
+local StartButton = Instance.new("TextButton", MainFrame)
+StartButton.Size = UDim2.new(0.8, 0, 0, 40); StartButton.Position = UDim2.new(0.1, 0, 0.45, 0)
+StartButton.Text = "START ENGINE"; StartButton.BackgroundColor3 = Color3.fromRGB(0, 150, 75); StartButton.TextColor3 = Color3.fromRGB(255, 255, 255); StartButton.Parent = MainFrame
+
+local StopBtn = Instance.new("TextButton", MainFrame)
+StopBtn.Size = UDim2.new(0.8, 0, 0, 40); StopBtn.Position = UDim2.new(0.1, 0, 0.75, 0)
+StopBtn.Text = "STOP"; StopBtn.BackgroundColor3 = Color3.fromRGB(200, 50, 50); StartButton.TextColor3 = Color3.fromRGB(255, 255, 255); StopBtn.Parent = MainFrame
+
+-- --- LOGIK ENGINE ---
+StartButton.MouseButton1Click:Connect(function()
+    if IsActive or ItemInput.Text == "" then return end
+    IsActive = true
+    StartButton.Text = "RUNNING..."
+    
+    local itemName = ItemInput.Text
+    
+    -- Thread 1: DROP (Laju)
+    task.spawn(function()
+        while IsActive do
+            pcall(function()
+                Remotes.Drop:FireServer(itemName)
+            end)
+            task.wait(0.03)
+        end
+    end)
+    
+    -- Thread 2: EQUIP (0.8s)
+    task.spawn(function()
+        while IsActive do
+            pcall(function()
+                Remotes.Equip:FireServer(itemName)
+            end)
+            task.wait(0.8)
+        end
+    end)
+end)
+
+StopBtn.MouseButton1Click:Connect(function()
+    IsActive = false
+    StartButton.Text = "START ENGINE"
+end)
